@@ -1,0 +1,16 @@
+{
+    "website": "https://nysuffolkctyweb.myvscloud.com/webtrac/web",
+    "filters": {
+        "beginDate": {
+            "month": "February",
+            "day": "10",
+            "year": "2025"
+        },
+        "nights": "7",
+        "park": "Cupsogue"
+    },
+    "desiredSiteList": [
+        "Cupsogue Site 23",
+        "Cupsogue Site 24"
+    ]
+}

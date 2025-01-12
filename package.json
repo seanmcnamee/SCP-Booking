@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "login:account1": "set NODE_ENV=account1&& node src/login.js",
+    "login:account2": "set NODE_ENV=account1&& node src/login.js"
+  },
+  "dependencies": {
+    "config": "^3.3.12",
+    "selenium-webdriver": "^4.27.0"
+  }
+}
