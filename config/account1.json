@@ -2,15 +2,25 @@
     "website": "https://nysuffolkctyweb.myvscloud.com/webtrac/web",
     "filters": {
         "beginDate": {
-            "month": "February",
-            "day": "10",
+            "month": "May",
+            "day": "13",
             "year": "2025"
         },
-        "nights": "7",
-        "park": "Cupsogue"
+        "nights": "3",
+        "park": "Smith Point",
+        "siteSearch": "267,269,271,272,256"
     },
+    "firstAttemptStartTime": {
+        "hour": 23,
+        "minute": 23,
+        "second": 21
+    },
+    "selectHouseHoldMember": true,
     "desiredSiteList": [
-        "Cupsogue Site 23",
-        "Cupsogue Site 24"
+        "Smith Point Site 267",
+        "Smith Point Site 269",
+        "Smith Point Site 272",
+        "Smith Point Site 271",
+        "Smith Point Site 256"
     ]
 }
