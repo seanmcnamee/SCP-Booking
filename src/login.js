@@ -3,6 +3,7 @@ const assert = require("assert");
 
 const config = require('config');
 let isFirstIteration = true;
+const maxPageLoadWaitMs = 60000;
 
 
 (async function firstTest() {
@@ -12,18 +13,13 @@ let isFirstIteration = true;
     driver = await new Builder().forBrowser(Browser.CHROME).build();
     driver.manage().window().setRect({ width: 1280, height: 960, x: 0, y: 0 });
     await driver.get(config.get('website'));
-    await driver.manage().setTimeouts({ implicit: 500 });
-
-    // const navBurgerMenu = await driver.findElement(By.id('menu-button'));
-    // await navBurgerMenu.click();
-
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await driver.manage().setTimeouts({ implicit: maxPageLoadWaitMs });
 
     //// Login
     const signInMenuLink = await driver.findElement(By.css("div#menu_myaccount a.menuitem"));
     await signInMenuLink.click();
 
-    await new Promise(resolve => setTimeout(resolve, 10000));
+    await new Promise(resolve => setTimeout(resolve, config.get('loginWaitMs')));
 
     //// Navigate to Family Camping
     const headerMenuItems = await driver.findElements(By.css('#header-top li:has(.menuitem)'));
@@ -33,7 +29,6 @@ let isFirstIteration = true;
     if (menuItemSearch) {
       const menuItemText = await menuItemSearch.getText();
       console.log("Found menuItemSearch! ", menuItemText);
-
       await menuItemSearch.click();
     } else {
       console.log("Not found...");
@@ -113,7 +108,6 @@ let isFirstIteration = true;
       await searchButton.click();
 
       //Select first available of desired sites
-      await driver.wait(until.elementLocated(By.css('table#rnwebsearch_output_table')), 5000);
       const allDesiredSiteRows = await driver.findElements(By.css('table#rnwebsearch_output_table > tbody > tr'));
       // await driver.wait(until.elementIsVisible(allDesiredSiteRows), 5000);
       // const allDesiredSiteCheckboxes = await driver.findElements(By.css('div.graphical-inner.ui-draggable.ui-draggable-handle > a'))
@@ -154,7 +148,6 @@ let isFirstIteration = true;
 
           if (config.get("selectHouseHoldMember") === true) {
             
-            await driver.wait(until.elementLocated(By.css('div.group.webaddtocartmatrix__membergroup div.field-wrap.checkbox-field-wrap:has(input.checkbox)')), 5000);
             const familyMemberSelection = await driver.findElement(By.css("div.group.webaddtocartmatrix__membergroup div.field-wrap.checkbox-field-wrap:has(input.checkbox)"));
             await familyMemberSelection.click();
   
@@ -162,7 +155,6 @@ let isFirstIteration = true;
             await continueCartButton.click();
           }
 
-          await driver.wait(until.elementLocated(By.css('#content h1.page-header')), 5000);
           const pageHeader = await driver.findElement(By.css("#content h1.page-header"));
           const pageHeaderText = await pageHeader.getText();
 
@@ -173,13 +165,17 @@ let isFirstIteration = true;
             hasDesiredSiteSecuredInCart = true;
           } else {
             const cancelCartButton = await driver.findElement(By.css("a#processingprompts_buttoncancel"));
+
+            driver.executeScript("arguments[0].scrollIntoView(true);", cancelCartButton);
+            await new Promise(resolve => setTimeout(resolve, 250));
+
             await cancelCartButton.click();
           }
 
           break;
         }
       }
-    } while (!hasDesiredSiteSecuredInCart && hasAnyAvailableSites);
+    } while (!hasDesiredSiteSecuredInCart);
 
 
     if (hasDesiredSiteSecuredInCart) {
