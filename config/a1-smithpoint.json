@@ -3,27 +3,25 @@
     "loginWaitMs": 20000,
     "filters": {
         "beginDate": {
-            "month": "July",
+            "month": "May",
             "day": "13",
             "year": "2025"
         },
-        "nights": "7",
+        "nights": "3",
         "park": "Smith Point",
-        "siteSearch": "242,244,254,258,264,266,268"
+        "siteSearch": "267,269,271,272,256"
     },
     "firstAttemptStartTime": {
         "hour": 18,
         "minute": 59,
         "second": 59
     },
-    "selectHouseHoldMember": false,
+    "selectHouseHoldMember": true,
     "desiredSiteList": [
-        "Smith Point Site 242",
-        "Smith Point Site 244",
-        "Smith Point Site 254",
-        "Smith Point Site 258",
-        "Smith Point Site 264",
-        "Smith Point Site 266",
-        "Smith Point Site 268"
+        "Smith Point Site 267",
+        "Smith Point Site 269",
+        "Smith Point Site 272",
+        "Smith Point Site 271",
+        "Smith Point Site 256"
     ]
 }

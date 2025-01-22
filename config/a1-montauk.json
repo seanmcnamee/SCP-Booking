@@ -1,0 +1,27 @@
+{
+    "website": "https://nysuffolkctyweb.myvscloud.com/webtrac/web",
+    "loginWaitMs": 20000,
+    "filters": {
+        "beginDate": {
+            "month": "May",
+            "day": "13",
+            "year": "2025"
+        },
+        "nights": "3",
+        "park": "Montauk",
+        "siteSearch": "267,269,271,272,256"
+    },
+    "firstAttemptStartTime": {
+        "hour": 18,
+        "minute": 59,
+        "second": 59
+    },
+    "selectHouseHoldMember": true,
+    "desiredSiteList": [
+        "Montauk Site 267",
+        "Montauk Site 269",
+        "Montauk Site 272",
+        "Montauk Site 271",
+        "Montauk Site 256"
+    ]
+}

@@ -1,0 +1,27 @@
+{
+    "website": "https://nysuffolkctyweb.myvscloud.com/webtrac/web",
+    "loginWaitMs": 20000,
+    "filters": {
+        "beginDate": {
+            "month": "May",
+            "day": "13",
+            "year": "2025"
+        },
+        "nights": "3",
+        "park": "Cupsogue",
+        "siteSearch": "267,269,271,272,256"
+    },
+    "firstAttemptStartTime": {
+        "hour": 18,
+        "minute": 59,
+        "second": 59
+    },
+    "selectHouseHoldMember": false,
+    "desiredSiteList": [
+        "Cupsogue Site 267",
+        "Cupsogue Site 269",
+        "Cupsogue Site 272",
+        "Cupsogue Site 271",
+        "Cupsogue Site 256"
+    ]
+}

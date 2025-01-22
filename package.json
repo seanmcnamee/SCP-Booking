@@ -1,7 +1,11 @@
 {
   "scripts": {
-    "login:account1": "set NODE_ENV=account1&& node src/login.js",
-    "login:account2": "set NODE_ENV=account2&& node src/login.js"
+    "a1-cupsogue": "set NODE_ENV=a1-cupsogue&& node src/login.js",
+    "a1-montauk": "set NODE_ENV=a1-montauk&& node src/login.js",
+    "a1-smithpoint": "set NODE_ENV=a1-smithpoint&& node src/login.js",
+    "a2-cupsogue": "set NODE_ENV=a2-cupsogue&& node src/login.js",
+    "a2-montauk": "set NODE_ENV=a2-montauk&& node src/login.js",
+    "a2-smithpoint": "set NODE_ENV=a2-smithpoint&& node src/login.js"
   },
   "dependencies": {
     "config": "^3.3.12",
