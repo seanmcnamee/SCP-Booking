@@ -1,5 +1,4 @@
 const { By, Builder, until, Browser } = require('selenium-webdriver');
-const assert = require("assert");
 
 const config = require('config');
 let isFirstIteration = true;
@@ -24,7 +23,6 @@ const maxPageLoadWaitMs = 60000;
     //// Navigate to Family Camping
     const headerMenuItems = await driver.findElements(By.css('#header-top li:has(.menuitem)'));
     const menuItemSearch = await findByText(headerMenuItems, 'SEARCH');
-    // await driver.wait(until.elementIsVisible(menuItemSearch), 2000);
 
     if (menuItemSearch) {
       const menuItemText = await menuItemSearch.getText();
@@ -44,10 +42,6 @@ const maxPageLoadWaitMs = 60000;
     } else {
       console.log("Not found...");
     }
-
-    //Apply filters
-    // const filtersToggleButton = await driver.findElement(By.css('button.collapse-icon'));
-    // await filtersToggleButton.click();
 
     //Begin Date    
     const beginDateToggle = await driver.findElement(By.id('begindate_vm_6_button'));
@@ -86,6 +80,8 @@ const maxPageLoadWaitMs = 60000;
     await desiredNight.click();
 
     //Park
+    const parkOptionsSectionCollapseButton = await driver.findElement(By.css("div.newline.search-criteria.newline-combobox:has(label[for=category]) > button"));
+    await parkOptionsSectionCollapseButton.click();
     const parksOptions = await driver.findElements(By.css('#category_vm_2_wrap ul > li'));
     const desiredPark = await findByText(parksOptions, config.get('filters.park'));
     driver.executeScript("arguments[0].scrollIntoView(true);", desiredPark);
@@ -109,8 +105,6 @@ const maxPageLoadWaitMs = 60000;
 
       //Select first available of desired sites
       const allDesiredSiteRows = await driver.findElements(By.css('table#rnwebsearch_output_table > tbody > tr'));
-      // await driver.wait(until.elementIsVisible(allDesiredSiteRows), 5000);
-      // const allDesiredSiteCheckboxes = await driver.findElements(By.css('div.graphical-inner.ui-draggable.ui-draggable-handle > a'))
 
       const allDesiredSiteRowsAndProperties = await Promise.all(
         allDesiredSiteRows.map(async row => ({
@@ -134,7 +128,6 @@ const maxPageLoadWaitMs = 60000;
           hasAnyAvailableSites = true;
           await desiredSite.checkbox.click();
 
-          //TODO: wait until 7pm
           if (isFirstIteration) {
             const hour = config.get("firstAttemptStartTime.hour");
             const minute = config.get("firstAttemptStartTime.minute");
@@ -146,30 +139,58 @@ const maxPageLoadWaitMs = 60000;
           const addToCartButton = await driver.findElement(By.css("button.button.primary.multiselectlist__addbutton"));
           await addToCartButton.click();
 
-          if (config.get("selectHouseHoldMember") === true) {
-            
-            const familyMemberSelection = await driver.findElement(By.css("div.group.webaddtocartmatrix__membergroup div.field-wrap.checkbox-field-wrap:has(input.checkbox)"));
-            await familyMemberSelection.click();
+          if (config.get("selectHouseHoldMember") === true) {            
+            const familyMemberSelectionPageHeader = await driver.findElement(By.css("#content h1.page-header"));
+            const familyMemberSelectionPageHeaderText = await familyMemberSelectionPageHeader.getText();
+
+            if (familyMemberSelectionPageHeaderText === "Family Member Selection") {
+              const familySelectionButtonGroup = await driver.findElements(By.css("#group20 button, #group20 a"));
+              // await driver.wait(until.elementIsVisible(revealed), 2000);
+              const continueFamilySelectionButton = await findByText(familySelectionButtonGroup, "Continue");
+              const backFamilySelectionButton = await findByText(familySelectionButtonGroup, "Back");
   
-            const continueCartButton = await driver.findElement(By.css("button#button201"));
-            await continueCartButton.click();
+              if (continueFamilySelectionButton !== undefined) {
+                console.log("Selecting family member");
+                const familyMemberSelection = await driver.findElement(By.css("div.group.webaddtocartmatrix__membergroup div.field-wrap.checkbox-field-wrap:has(input.checkbox)"));
+                await familyMemberSelection.click();
+    
+                const continueCartButton = await driver.findElement(By.css("button#button201"));
+                await continueCartButton.click();
+              } else if (backFamilySelectionButton !== undefined) {
+                console.log("Failure to select family member. Pressing back...");
+                await backFamilySelectionButton.click();
+                
+                const clearFromCartButton = await driver.findElement(By.css("button.button.multiselectlist__clearbutton"));
+                await clearFromCartButton.click();
+
+                break;
+              } else {
+                console.log("Unknown case while in family selection! Could not find continue or back button");
+              }
+            } else {
+              console.log("Was not in the family member selection!");
+            }
           }
 
-          const pageHeader = await driver.findElement(By.css("#content h1.page-header"));
-          const pageHeaderText = await pageHeader.getText();
+          const checkoutPageHeader = await driver.findElement(By.css("#content h1.page-header"));
+          const checkoutPageHeaderText = await checkoutPageHeader.getText();
 
-          const buttonGroup = await driver.findElements(By.css("#processingprompts_buttongroup button, #processingprompts_buttongroup a"));
-          const continueSuccessButton = await findByText(buttonGroup, "Continue");
+          const cartCheckoutButtonGroup = await driver.findElements(By.css("#processingprompts_buttongroup button, #processingprompts_buttongroup a"));
+          const continueCheckoutButton = await findByText(cartCheckoutButtonGroup, "Continue");
+          const cancelCheckoutButton = await findByText(cartCheckoutButtonGroup, "Cancel");
 
-          if (pageHeaderText.includes("(Purchase)") && continueSuccessButton !== undefined) {
+          if (checkoutPageHeaderText.includes("(Purchase)") && continueCheckoutButton !== undefined) {
             hasDesiredSiteSecuredInCart = true;
-          } else {
-            const cancelCartButton = await driver.findElement(By.css("a#processingprompts_buttoncancel"));
+            console.log("Desired Site is in cart with 'Continue' button: ", continueCheckoutButton);
+          } else if (cancelCheckoutButton !== undefined) {
+            console.log("Failure to secure site. Cancelling...");
 
-            driver.executeScript("arguments[0].scrollIntoView(true);", cancelCartButton);
+            driver.executeScript("arguments[0].scrollIntoView(true);", cancelCheckoutButton);
             await new Promise(resolve => setTimeout(resolve, 250));
 
-            await cancelCartButton.click();
+            await cancelCheckoutButton.click();
+          } else {
+            console.log("Unknown case while in cart! Could not find continue or cancel button");
           }
 
           break;
@@ -186,38 +207,6 @@ const maxPageLoadWaitMs = 60000;
     }
 
 
-
-
-
-
-
-
-
-    // let menuItemFamilyCamping;
-    // for (let subMenuItem of subMenuItems) {
-    //   const subMenuItemText = await subMenuItem.getText();
-    //   console.log('SubMenu item: ', subMenuItemText);
-    //   // if (subMenuItemText === 'SEARCH') {
-    //   //   menuItemFamilyCamping = subMenuItem;
-    //   //   break;
-    //   // }
-    // }
-
-
-    // let title = await driver.getTitle();
-    // assert.equal("Web form", title);
-
-    // await driver.manage().setTimeouts({implicit: 500});
-
-    // let textBox = await driver.findElement(By.name('my-text'));
-    // let submitButton = await driver.findElement(By.css('button'));
-
-    // await textBox.sendKeys('Selenium');
-    // await submitButton.click();
-
-    // let message = await driver.findElement(By.id('message'));
-    // let value = await message.getText();
-    // assert.equal("Received!", value);
 
 
   } catch (e) {
