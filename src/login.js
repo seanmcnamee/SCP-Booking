@@ -11,7 +11,7 @@ const maxPageLoadWaitMs = 60000;
 
   try {
     driver = await new Builder().forBrowser(Browser.CHROME).build();
-    driver.manage().window().setRect({ width: 1280, height: 960, x: 0, y: 0 });
+    driver.manage().window().setRect({ width: 1280, height: 800, x: 0, y: 0 });
     await driver.get(config.get('website'));
     await driver.manage().setTimeouts({ implicit: maxPageLoadWaitMs });
 

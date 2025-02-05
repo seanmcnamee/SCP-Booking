@@ -3,13 +3,13 @@
     "loginWaitMs": 20000,
     "filters": {
         "beginDate": {
-            "month": "May",
-            "day": "13",
+            "month": "August",
+            "day": "16",
             "year": "2025"
         },
         "nights": "3",
         "park": "Montauk",
-        "siteSearch": "267,269,271,272,256"
+        "siteSearch": "30,29,28,27,26,25,33,34,35,36"
     },
     "firstAttemptStartTime": {
         "hour": 18,
@@ -18,10 +18,15 @@
     },
     "selectHouseHoldMember": true,
     "desiredSiteList": [
-        "Montauk Site 267",
-        "Montauk Site 269",
-        "Montauk Site 272",
-        "Montauk Site 271",
-        "Montauk Site 256"
+        "Montauk Site 30",
+        "Montauk Site 29",
+        "Montauk Site 28",
+        "Montauk Site 27",
+        "Montauk Site 26",
+        "Montauk Site 25",
+        "Montauk Site 33",
+        "Montauk Site 34",
+        "Montauk Site 35",
+        "Montauk Site 36"
     ]
 }

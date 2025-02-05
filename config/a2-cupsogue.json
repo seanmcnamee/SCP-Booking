@@ -3,13 +3,13 @@
     "loginWaitMs": 20000,
     "filters": {
         "beginDate": {
-            "month": "May",
-            "day": "13",
+            "month": "July",
+            "day": "21",
             "year": "2025"
         },
-        "nights": "3",
+        "nights": "7",
         "park": "Cupsogue",
-        "siteSearch": "267,269,271,272,256"
+        "siteSearch": "22,23,24,25,26,27"
     },
     "firstAttemptStartTime": {
         "hour": 18,
@@ -18,10 +18,11 @@
     },
     "selectHouseHoldMember": false,
     "desiredSiteList": [
-        "Cupsogue Site 267",
-        "Cupsogue Site 269",
-        "Cupsogue Site 272",
-        "Cupsogue Site 271",
-        "Cupsogue Site 256"
+        "Cupsogue Site 22",
+        "Cupsogue Site 23",
+        "Cupsogue Site 24",
+        "Cupsogue Site 25",
+        "Cupsogue Site 26",
+        "Cupsogue Site 27"
     ]
 }
